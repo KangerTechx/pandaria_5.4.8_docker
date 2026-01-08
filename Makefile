@@ -59,6 +59,7 @@ help:
 	@echo "  make telnet              - Connect to the RA console via telnet"
 	@echo ""
 	@echo "=== Config & Client ==="
+	@echo "  make client              - Download and prepare WoW 5.4.8 client files"
 	@echo "  make configure_client    - Update client realmlist and Config.wtf"
 	@echo "  make apply_custom_config - Apply .conf overrides from $(CUSTOM_DIR)"
 	@echo ""
@@ -84,6 +85,9 @@ configure:
 
 extract_data:
 	$(DOCKER_COMPOSE) run --rm $(UTILITY) extract_data
+
+client:
+	$(DOCKER_COMPOSE) run --rm $(UTILITY) client
 
 # --- Database Operations ---
 init_db:
@@ -241,7 +245,7 @@ configure_client:
 apply_custom_config:
 	$(DOCKER_COMPOSE) run --rm $(UTILITY) /bin/commands$(INSTALL_PREFIX) apply_custom_config.sh $(FILE)
 
-install: fetch_source build compile extract_data setup_db configure start
+install: fetch_source build client compile extract_data setup_db configure start
 	@echo "Installation complete. All services are running."
 
 # --- Dependency Check ---
