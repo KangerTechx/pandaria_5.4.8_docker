@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     clang clang-tools lldb \
     libreadline-dev cmake libssl-dev make gcc g++ \
     libboost-all-dev libace-dev libbz2-dev unzip wget \
-     jq \
     default-mysql-client default-libmysqlclient-dev \
     && rm -rf /var/lib/apt/lists/*
 
