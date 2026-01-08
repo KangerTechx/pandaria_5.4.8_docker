@@ -1,111 +1,116 @@
-# Pandaria 5.4.8 – Dockerized Server
+# Pandaria 5.4.8 – Serveur Dockerisé
 
-## Overview
+## Vue d'ensemble
 
-This project provides a **Docker-based setup** for Pandaria 5.4.8, intended as a **learning tool** for containerized game servers.  
-It is not designed for public hosting or production use but offers a quick way to build, configure, and run Pandaria 5.4.8 locally.
-
----
-
-## Purpose
-
-With this project, you can:
-- Quickly build and run a Pandaria 5.4.8 server without manual dependency management.
-- Experiment with SQL tweaks, custom content, and server configurations.
-- Learn Docker workflows for multi-service setups.
-
-This is primarily for **personal use, testing, and education**, not for commercial or large-scale deployment.
+Ce projet fournit une **installation basée sur Docker** pour Pandaria 5.4.8, destinée comme **outil d’apprentissage** pour les serveurs de jeux conteneurisés.  
+Il n’est pas conçu pour l’hébergement public ou une utilisation en production, mais permet de construire, configurer et exécuter Pandaria 5.4.8 localement de manière rapide.
 
 ---
 
-## Key Features
-- Automated **compilation and database setup** with `make`.
-- Support for **internal MariaDB** or **external database connections**.
-- Modular services: each component (authserver, worldserver, database, phpMyAdmin, utilities) runs in its own container.
-- Tools for **client configuration**, backups, and applying custom SQL or configuration overrides.
-- Customization via `/app/custom_sql` and `/app/custom_conf`.
+## Objectif
 
-This setup is tested on **Linux hosts** with Docker and Docker Compose.  
-Windows and macOS are supported but may require manual tweaks, especially for MariaDB and file paths.
+Avec ce projet, vous pouvez :
+- Construire et lancer rapidement un serveur Pandaria 5.4.8 sans gérer manuellement les dépendances.  
+- Expérimenter avec des ajustements SQL, du contenu personnalisé et des configurations serveur.  
+- Apprendre les workflows Docker pour des setups multi-services.
+
+Ce projet est principalement destiné à **un usage personnel, test et éducatif**, et non pour un déploiement commercial ou à grande échelle.
 
 ---
 
-## Client Preparation
+## Fonctionnalités principales
 
-Before starting the server, your **World of Warcraft: Mists of Pandaria client (5.4.8)** must be patched to connect properly.  
-Follow the instructions provided by the SkyFire or Pandaria 5.4.8 project for your client version.  
-Without proper patching, the client may not connect or may behave unpredictably.
+- Compilation et configuration de base de données **automatisées** avec `make`.  
+- Support pour **MariaDB interne** ou **connexions à une base externe**.  
+- Services modulaires : chaque composant (authserver, worldserver, base de données, phpMyAdmin, utilitaires) fonctionne dans son propre conteneur.  
+- Outils pour **configuration du client**, sauvegardes, et application de SQL personnalisé ou overrides de configuration.  
+- Personnalisation via `/app/custom_sql` et `/app/custom_conf`.
+
+Cette configuration est testée sur **Linux** avec Docker et Docker Compose.  
+Windows et macOS sont supportés mais peuvent nécessiter des ajustements manuels, notamment pour MariaDB et les chemins de fichiers.
+
+---
+
+## Préparation du client
+
+Avant de démarrer le serveur, votre **client World of Warcraft: Mists of Pandaria (5.4.8)** doit être patché correctement.  
+Suivez les instructions fournies par le projet SkyFire ou Pandaria 5.4.8 pour votre version de client.  
+Sans patch approprié, le client peut ne pas se connecter ou se comporter de manière imprévisible.
 
 ---
 
 ## Limitations
 
-- Intended for **private, educational use only**.
-- Not optimized for **public or production servers**.
+- Destiné à **un usage privé et éducatif uniquement**.  
+- Non optimisé pour des **serveurs publics ou de production**.
 
 ---
 
-## Quick Installation Guide (Linux)
+## Guide d’installation rapide (Linux)
 
-### 1. Prerequisites
-Ensure the following are installed:
+### 1. Prérequis
+
+Assurez-vous que les éléments suivants sont installés :
+
 - Docker  
 - Docker Compose  
 - Git  
-- Telnet client  
+- Client Telnet  
 
-Install them using your distribution’s package manager (e.g., `apt`, `dnf`, or `pacman`).
+Installez-les via le gestionnaire de paquets de votre distribution (ex : `apt`, `dnf`, ou `pacman`).
 
 ---
 
-### 2. Environment Setup
-Copy the example `.env` file and configure it:
+### 2. Configuration de l’environnement
+
+Copiez le fichier `.env` exemple et configurez-le :
+
 ```bash
 cp env.dist .env
 ```
 
-Edit .env to set:
-	•	REALM_ADDRESS – your server IP or hostname
-	•	WOW_PATH – path to your MoP 5.4.8 client
-	•	Database settings – set EXTERNAL_DB=true if you want to use an existing database; otherwise, the internal MariaDB container will be used.
+Éditez .env pour définir ::
+- REALM_ADDRESS – votre IP ou hostname du serveur
+- WOW_PATH – chemin vers votre client MoP 5.4.8
+- Paramètres de base de données – mettez EXTERNAL_DB=true si vous souhaitez utiliser une base existante, sinon le conteneur MariaDB interne sera utilisé.
 
 
-### 3. Install and Run the Server
+### 3. Installer et lancer le serveur
 
 ```bash
 make install
 ````
 
-This command will:
-	1.	Fetch or update the source code.
-	2.	Build all Docker containers (utility, authserver, worldserver, database if internal).
-	3.	Compile the Pandaria 5.4.8 server.
-  4.	Extract maps, DBC, VMaps, and MMaps into /app/data.
-	5.	Initialize and configure the database.
-	6.	Generate worldserver.conf and authserver.conf.
-	7.	Start all services automatically.
+Cette commande :
+	1. Récupère ou met à jour le code source
+	2. Construit tous les conteneurs Docker (utility, authserver, worldserver, base si interne)
+	3. Compile le serveur Pandaria 5.4.8
+	4. Extrait maps, DBC, VMaps et MMaps dans /app/data
+	5. Initialise et configure la base de données
+	6. Génère worldserver.conf et authserver.conf
+	7. Démarre automatiquement tous les services
 
-### 4. Configure the WoW Client
+### 4. Configurer le client WoW
 
 ```bash
 make configure_client
 ````
 
-This will automatically update:
+Cette commande met à jour automatiquement :
 	•	realmlist.wtf
 	•	Config.wtf
 
-### 5. Log In and Play
+### 5. Connexion et jeu
 
-Use the default administrator account (GM Level 3 – full privileges):
+Utilisez le compte administrateur par défaut (GM Level 3 – privilèges complets) :
 ```bash
-Username: admin
-Password: admin
+Nom d’utilisateur : admin
+Mot de passe : admin
 ```
 
-### 6. Creating Additional Accounts
+### 6. Création de comptes supplémentaires
 
-Use the built-in Remote Administration (RA) console via Telnet, logged in as the **default admin account** (GM Level 3):
+Utilisez la console d’administration à distance (RA) via Telnet, connecté avec le compte admin par défaut (GM Level 3) :
 
 ```bash
 make telnet
@@ -116,52 +121,52 @@ Log in with: admin pass: admion
 
 
 ```bash
-account create <username> <password>
-account set gmlevel <username> <gmlevel> <realmID>
+account create <nom_utilisateur> <mot_de_passe>
+account set gmlevel <nom_utilisateur> <gmlevel> <realmID>
 ```
 
 GmLevels
-	•	1 = Normal player (default access)
-	•	3 = Highest GM privileges
+	•	1 = Joueur normal (accès par défaut)
+	•	3 = Privilèges GM les plus élevés
 
 RealmID
-	•	The last argument is the realmID.
-	•	By default, the primary realm uses ID 1.
-	•	Use -1 to apply the same GM permission across all realms.
+	•	Le dernier argument est le realmID.
+	•	Par défaut, le realm principal utilise l’ID 1.
+	•	Utilisez -1 pour appliquer les mêmes permissions GM à tous les realms.
 
-## Manual Setup (without make install)
+## Installation manuelle (sans make install)
 
-If you prefer to run each step manually, you can use the underlying Docker Compose commands directly
+Vous pouvez exécuter chaque étape manuellement avec Docker Compose :
 
 ```bash
-# 1. Build the utility container (compiles SkyFire and provides tools)
+# 1. Construire le conteneur utilitaire (compile SkyFire et fournit les outils)
 docker compose build utility
 
-# 2. Compile the Pandaria 5.4.8 core
+# 2.  Compiler le core Pandaria 5.4.8
 docker compose run --rm utility compile
 
-# 3. Extract maps, DBC, VMaps, and MMaps
+# 3. Extraire maps, DBC, VMaps et MMaps
 docker compose run --rm utility extract_data
 
-# 4. Initialize and populate the database
+# 4. Initialiser et remplir la base de données
 docker compose run --rm utility init_db
 docker compose run --rm utility populate_db
 docker compose run --rm utility update_db
 docker compose run --rm utility finalize_db
 
-# 5. Generate configuration files
+# 5. Générer les fichiers de configuration
 docker compose run --rm utility configure
 
-# 6. Start the servers (authserver, worldserver, and database if internal)
+# 6. Démarrer les serveurs (authserver, worldserver, et DB si interne)
 docker compose up -d
 
-# 7. Follow the logs
+# 7. Suivre les logs
 docker compose logs -f
 ```
 
 
 
-## Directory Overview
+## Aperçu des répertoires
 
 This project uses several directories to organize source code, configuration, and runtime data.  
 Below is an overview of each important directory and its purpose. Once connected, you can create accounts with:
@@ -171,108 +176,108 @@ Below is an overview of each important directory and its purpose. Once connected
 
 | Directory                          | Purpose                                                                 |
 |------------------------------------|-------------------------------------------------------------------------|
-| `app/bin`                          | Compiled binaries (e.g., `authserver`, `worldserver`, and data tools). |
-| `app/custom_conf`                  | User-provided configuration overrides, merged after defaults.          |
-| `app/data`                         | Extracted game data (maps, DBC, VMaps, MMaps) used by the servers.     |
-| `app/etc`                          | Default configuration files for the servers (`authserver.conf`, etc.). |
-| `app/lib`                          | Libraries required by the server binaries (if not system-installed).   |
-| `app/logs`                         | Log files from `authserver`, `worldserver`, and other services.        |
-| `app/sql/backup`                   | Database backups (full or partial exports).                            |
-| `app/sql/custom`                   | Custom SQL scripts applied **after** all updates (for mounts, tweaks). |
-| `app/sql/fixes`                    | Fix scripts run **after DB updates but before minor patches**.         |
-| `app/sql/install`                  | Base database installation scripts for auth/world/characters DBs.      |
-| `app/sql/misc`                     | SQL scripts not applied automatically (manual tweaks or experiments).  |
-| `app/sql/templates`                | Template SQL files for custom database structures or test realms.      |
-| `app/wow`                          | Local copy of the MoP 5.4.8 client (used for data extraction).         |
-| `docker/authserver`                | Dockerfile and configs for building the `authserver` container.        |
-| `docker/utility`                   | Dockerfile and build environment for compiling, tools, and data tasks. |
-| `docker/worldserver`               | Dockerfile and configs for building the `worldserver` container.       |
-| `misc`                             | Helper scripts (client configurators, tools, maintenance).             |
-| `src`                              | Source code for the Pandaria 5.4.8 core and its dependencies.          |
+| `app/bin`                          | Binaries compilés (authserver, worldserver, outils de données)          |
+| `app/custom_conf`                  | Overrides de configuration utilisateur, fusionnés après les defaults    |
+| `app/data`                         | Données extraites du jeu (maps, DBC, VMaps, MMaps) utilisées par le serveur |
+| `app/etc`                          | Fichiers de config par défaut (authserver.conf, etc.)                   |
+| `app/lib`                          | Librairies requises par les binaires (si non installées système)        |
+| `app/logs`                         | Logs des services (`authserver`, `worldserver`, etc.)                   |
+| `app/sql/backup`                   | Sauvegardes de la base de données                                       |
+| `app/sql/custom`                   | Scripts SQL personnalisés appliqués après toutes les mises à jour       |
+| `app/sql/fixes`                    | Scripts de corrections appliqués après les updates mais avant les patches mineurs |
+| `app/sql/install`                  | Scripts d’installation de base pour auth, world, characters             |
+| `app/sql/misc`                     | Scripts SQL non appliqués automatiquement (expérimentations manuelles)  |
+| `app/sql/templates`                | Templates pour bases ou realms de test                                  |
+| `app/wow`                          | Copie locale du client MoP 5.4.8 (utilisée pour l’extraction de données) |
+| `docker/authserver`                | Dockerfile et configs pour le conteneur `authserver`                    |
+| `docker/utility`                   | Dockerfile pour compilation, outils et tâches de données                |
+| `docker/worldserver`               | Dockerfile et configs pour le conteneur `worldserver`                   |
+| `misc`                             | Scripts d’aide (configurateurs client, maintenance)                     |
+| `src`                              | Code source du core Pandaria 5.4.8 et dépendances                       |
 
 
-## SQL Execution Order
+## Ordre d’exécution SQL
 
-During `make install` and database initialization, SQL scripts from `/app/sql` are executed in the following order:
+Lors de `make install` et de l’initialisation de la base, les scripts SQL de `/app/sql` sont exécuté dans l'ordre suivant:
 
-1. **`install/`** – Base schema and data for the `auth`, `characters`, and `world` databases.  
-2. **Official updates** – Incremental updates from the core repository.  
-3. **`fixes/`** – Custom fixes applied **after official updates but before final adjustments** (e.g., bug fixes, structural corrections).  
-4. **`custom/`** – Custom gameplay changes (mounts, vendors, rates) applied **last**, after all updates and fixes.  
-5. **`misc/`** – Not run automatically. Use for manual tweaks or experiments:
-6. **`backup/`** – Contains database dumps for rollback or migration, not executed automatically.
-7. **`templates/`**  – Provides base structures or sample realms; not applied unless explicitly called.
+1. **`install/`** – Schéma de base et données pour `auth`, `characters`, et `world`.  
+2. **Mises à jour officielles** – Updates incrémentales depuis le dépôt core.  
+3. **`fixes/`** – Correctifs appliqués **après les updates officiels mais avant les ajustements finaux** (e.g., bug fixes, structural corrections).  
+4. **`custom/`** – Modifications gameplay personnalisées (mounts, vendors, rates) appliquées **en dernier**, après toutes les mises à jour et fixes.  
+5. **`misc/`** – Non exécuté automatiquement, à utiliser pour tests manuels
+6. **`backup/`** – Contient dumps pour rollback ou migration, non exécutés automatiquement.
+7. **`templates/`**  – Fournit structures ou realms de test, non appliqué sauf appel explicite.
 
-This order ensures:
-	•	The database is built from a clean state.
-	•	Official updates are always applied first.
-	•	Fixes and customizations never conflict with core updates.
-	•	Experimental SQL stays separate until explicitly executed.
-
-
-## Applying Custom SQL and Config Files
-
-You can manually run SQL scripts or apply configuration overrides without re-running the full installation.  
-**Note:** After applying SQL or configuration changes, you must restart `worldserver` (and `authserver` if configs were updated) for the changes to take effect.
+Cet ordre garantit :
+	•	La base est construite à partir d’un état propre
+	•	OLes updates officiels sont appliqués en premier
+	•	Les correctifs et personnalisations ne créent pas de conflits
+	•	Les scripts expérimentaux restent séparés jusqu’à exécution explicite
 
 
-### Running SQL Scripts
+## Application de SQL et overrides de config
 
-The `make apply_sql` target executes SQL files against the chosen database.  
+Vous pouvez exécuter les scripts SQL ou overrides de config sans réinstaller tout le serveur.  
+**Note:** Après toute modification SQL ou config, redémarrez `worldserver` (et `authserver` si les configs onnt été mmodifiées) pour que les changements prennent effet.
+
+
+### Exécution de scripts SQL
+
+La commande `make apply_sql` exécute les fichiers SQL sur la base choisie.  
 Usage:
 ```bash
 make apply_sql <directory> [FILE=<filename.sql>] [DB=<database>]
 ```
 
-Parameters:
-	•	<directory> – One of the SQL directories under /app/sql (misc, custom, fixes, etc.).
-	•	FILE – (Optional) The SQL file to run. If omitted, all files in the directory will be applied.
-	•	DB – (Optional) Target database (auth, characters, or world).
-	•	If omitted, the system attempts to infer the target DB from the file name (e.g., auth_*.sql → auth DB).
+Paramètres :
+	•	<directory> – un des dossiers SQL sous /app/sql (misc, custom, fixes, etc.).
+	•	FILE – (Optionnel) Fichier SQL unique à exécuter, sinon tous les fichiers du répertoire
+	•	DB – (Optionnel) Base cible (auth, characters, or world).
+	•	Si omis, la base est inférée depuis le nom du fichier (e.g., auth_*.sql → auth DB).
 
 ```bash
-# Apply a single SQL file to the inferred database
+# Appliquer un seul fichier à la base inférée
 make apply_sql misc FILE=my_script.sql
 
-# Apply a single file to a specific database
+# Appliquer un fichier spécifique à une base
 make apply_sql custom FILE=my_custom_world.sql DB=world
 
-# Apply all SQL files in the fixes directory
+# Appliquer tous les scripts de fixes
 make apply_sql fixes
 ```
 
 
-### Applying Custom Config Overrides
+### Application des overrides de configuration
 
 ```bash
 make apply_custom_config [FILE=<filename.conf>]
 ```
 
 Parameters:
-	•	FILE – (Optional) Apply a single configuration file.
-	•	If omitted, all files in /app/custom_conf will be applied.
+	•	FILE – (Optionnel) Appliquer un seul fichier
+	•	Si omis, tous les fichiers de /app/custom_conf sont appliqués.
 
 
 ```bash
-# Apply all configuration overrides
+# Appliquer tous les overrides
 make apply_custom_config
 
-# Apply only a specific override
+# Appliquer un override spécifique
 make apply_custom_config FILE=worldserver.conf
 ```
 
-Reminder: After applying configuration overrides, restart worldserver (and authserver if affected) for the new settings to load.
+Reminder: Après les application des overrides de configuration, redémarrer worldserver (et authserver si affectté) pour les appliquer.
 
 
 
 ### Notes:
-- Files like `.keep` are used to preserve empty directories in Git but have no functional purpose.
-- Most directories (`/app/sql`, `/app/data`, `/src`, `/backup`) are ignored by Git except for `.keep` markers and specific custom folders.
-- SQL scripts in `custom_sql/fixes` and `custom_sql/custom` are run automatically during `make setup_db`.  
-  Scripts in `custom_sql/misc` **must be run manually** if needed.
+- Les fichiers `.keep` servent à préserver les dossiers vides dans Git.
+- La plupart des répertoires (`/app/sql`, `/app/data`, `/src`, `/backup`) sont ignorés par Git sauf `.keep` ou dossiers custom spécifiques.
+- Les scripts SQL dans `custom_sql/fixes` et `custom_sql/custom` sont exécutés automatiquement pendant `make setup_db`.  
+  Les scripts dans `custom_sql/misc` **oivent être exécutés manuellement** si besoin.
 
   ### Disclaimer
 
-This project is **intended solely for private exploration and learning purposes**.  
-It is not designed or supported for public hosting, commercial use, or as a production-grade server.  
-The goal is to help users learn about Docker, experiment with Pandaria 5.4.8, and explore custom server configurations in a controlled, private environment.
+Ce projet est **uniquement destiné à l’exploration et à l’apprentissage privé.**.  
+Il n’est pas conçu pour l’hébergement public, l’usage commercial, ou comme serveur de production.
+L’objectif est de permettre aux utilisateurs de découvrir Docker, expérimenter Pandaria 5.4.8 et explorer les configurations serveur dans un environnement privé et contrôlé.
