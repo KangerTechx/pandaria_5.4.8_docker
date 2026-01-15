@@ -266,7 +266,7 @@ fetch_source:
 	@if [ ! -d src/pandaria_5.4.8 ]; then \
 		echo "Cloning $(PROJECT_NAME) source..."; \
 		mkdir -p src; \
-		git clone $(REPO_URL) src/pandaria_5.4.8; \
+		git clone -b dev $(REPO_URL) src/pandaria_5.4.8; \
 	else \
 		echo "Updating $(PROJECT_NAME) source..."; \
 		cd src/pandaria_5.4.8; \

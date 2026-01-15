@@ -23,6 +23,7 @@ sed -i -e "s|^LogsDir =.*|LogsDir = \"$LOGS_DIR_PATH\"|" "$INSTALL_PREFIX/etc/wo
 sed -i -e "s|^LoginDatabaseInfo.*|LoginDatabaseInfo = \"$DB_HOST;$DB_PORT;$SERVER_DB_USER;$SERVER_DB_PASSWORD;$AUTH_DB\"|" "$INSTALL_PREFIX/etc/worldserver.conf"
 sed -i -e "s|^WorldDatabaseInfo.*|WorldDatabaseInfo = \"$DB_HOST;$DB_PORT;$SERVER_DB_USER;$SERVER_DB_PASSWORD;$WORLD_DB\"|" "$INSTALL_PREFIX/etc/worldserver.conf"
 sed -i -e "s|^CharacterDatabaseInfo.*|CharacterDatabaseInfo = \"$DB_HOST;$DB_PORT;$SERVER_DB_USER;$SERVER_DB_PASSWORD;$CHARACTER_DB\"|" "$INSTALL_PREFIX/etc/worldserver.conf"
+sed -i -e "s|^PlayerbotsDatabaseInfo.*|PlayerbotsDatabaseInfo = \"$DB_HOST;$DB_PORT;$SERVER_DB_USER;$SERVER_DB_PASSWORD;$PLAYERBOTS_DB\"|" "$INSTALL_PREFIX/etc/worldserver.conf"
 
 sed -i -e "s|^GameType =.*|GameType = \"$GAME_TYPE\"|" "$INSTALL_PREFIX/etc/worldserver.conf"
 sed -i -e "s|^RealmZone =.*|RealmZone = \"$REALM_ZONE\"|" "$INSTALL_PREFIX/etc/worldserver.conf"
