@@ -3,7 +3,7 @@ services:
     image: ${IMAGE_NAME}-utility:${OS_NAME}
     container_name: ${CONTAINER_NAME}-utility
     env_file:
-      - ./.env
+      - .env
     build:
       context: docker/utility
       dockerfile: Dockerfile
@@ -21,7 +21,7 @@ services:
     image: ${IMAGE_NAME}-authserver:${OS_NAME}
     container_name: ${CONTAINER_NAME}-authserver
     env_file:
-      - ./.env
+      - .env
     build:
       context: docker/authserver
       dockerfile: Dockerfile
@@ -37,7 +37,7 @@ services:
     image: ${IMAGE_NAME}-worldserver:${OS_NAME}
     container_name: ${CONTAINER_NAME}-worldserver
     env_file:
-      - ./.env
+      - .env
     build:
       context: docker/worldserver
       dockerfile: Dockerfile
