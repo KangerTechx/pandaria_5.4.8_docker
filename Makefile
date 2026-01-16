@@ -4,7 +4,7 @@ MAKEFLAGS += --silent
 # --- Load environment variables ---
 ifneq ("$(wildcard .env)","")
     include .env
-    export $(shell sed -n 's/^\([^#]\+\)=.*/\$(EXTRACTORS)/p' .env)
+    export $(shell sed -n 's/^\([^#]\+\)=.*/\1/p' .env)
 endif
 
 DOCKER_COMPOSE := docker compose
