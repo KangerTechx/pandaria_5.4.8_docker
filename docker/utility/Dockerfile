@@ -10,6 +10,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y \
     tzdata vim tmux git \
     clang clang-tools lldb \
+    curl \
     jq \
     libreadline-dev cmake libssl-dev make gcc g++ \
     libboost-all-dev libace-dev libbz2-dev unzip wget \
