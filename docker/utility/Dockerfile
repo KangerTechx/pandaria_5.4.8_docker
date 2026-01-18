@@ -1,34 +1,29 @@
-# --- Base image ---
 ARG BASE_IMAGE=debian:bookworm-slim
 FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Timezone (optional)
-ARG TZ=Europe/Paris
+# Set timezone if $TZ is provided
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Install build tools, libraries, and default Clang (14 on Bookworm)
+# Install compilers, build tools, and dev libraries (Bookworm versions)
 RUN apt-get update && apt-get install -y \
-    tzdata vim tmux git curl jq \
-    clang clang++ clang-tools lldb \
-    cmake make gcc g++ \
-    libreadline-dev libssl-dev libboost-all-dev \
-    libace-dev libbz2-dev unzip wget \
+    tzdata vim tmux git \
+    clang clang-tools lldb \
+    curl \
+    jq \
+    libreadline-dev cmake libssl-dev make gcc g++ \
+    libboost-all-dev libace-dev libbz2-dev unzip wget \
     default-mysql-client default-libmysqlclient-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy utility dispatcher
+# Copy dispatcher script (utility entrypoint)
 COPY utility /bin/utility
 RUN chmod +x /bin/utility
 
-# Copy all command scripts
+# Copy all command scripts (e.g., compile.sh, init_db.sh, etc.)
 COPY commands/ /bin/commands/
 RUN chmod +x /bin/commands/*.sh
 
-# Set entrypoint
+# Set dispatcher as entrypoint
 ENTRYPOINT ["/bin/utility"]
-
-# Default compilers for build
-ENV CMAKE_C_COMPILER=/usr/bin/clang
-ENV CMAKE_CXX_COMPILER=/usr/bin/clang++
