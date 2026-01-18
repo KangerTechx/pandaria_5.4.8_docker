@@ -1,9 +1,7 @@
 #!/bin/sh
 set -e
 
-
-
-# --- Default variables (overridable via .env) ---
+# --- Default variables ---
 PROJECT_NAME="${PROJECT_NAME:-Pandaria}"
 INSTALL_PREFIX="${INSTALL_PREFIX:-/app}"
 SOURCE_PREFIX="${SOURCE_PREFIX:-/src/pandaria_5.4.8}"
@@ -11,24 +9,27 @@ BUILD_DIR="$SOURCE_PREFIX/build"
 
 echo "=== Compiling Project $PROJECT_NAME ==="
 
-# Compiler defaults (from .env or fallback)
-CMAKE_C_COMPILER="${CMAKE_C_COMPILER:-/usr/bin/clang-14}"
-CMAKE_CXX_COMPILER="${CMAKE_CXX_COMPILER:-/usr/bin/clang++-14}"
-CMAKE_DISABLE_PCH="${CMAKE_DISABLE_PCH:-ON}" # Disable precompiled headers for stability
+# Compiler defaults (Clang 14)
+CMAKE_C_COMPILER="${CMAKE_C_COMPILER:-/usr/bin/clang}"
+CMAKE_CXX_COMPILER="${CMAKE_CXX_COMPILER:-/usr/bin/clang++}"
+CMAKE_DISABLE_PCH="${CMAKE_DISABLE_PCH:-ON}" # Disable precompiled headers
 BUILD_CORES="${BUILD_CORES:-0}" # 0 = all cores
 
-# Flags (can be overridden by CMAKE_CXX_FLAGS in .env)
+# Flags (ignore deprecated warnings and others)
 if [ -z "$CMAKE_CXX_FLAGS" ]; then
     CPU_MODEL=$(grep -m1 "model name" /proc/cpuinfo || true)
     BASE_FLAGS="-pthread -O2"
 
-    # Lower optimization for older CPUs (Ivy Bridge and older)
+    # Lower optimization for older CPUs
     if echo "$CPU_MODEL" | grep -Eq "i[357]-[23]"; then
-        echo "Old CPU detected ($CPU_MODEL). Disabling -march=native and lowering optimization..."
+        echo "Old CPU detected ($CPU_MODEL). Lowering optimization..."
         CMAKE_CXX_FLAGS="-pthread -O1"
     else
         CMAKE_CXX_FLAGS="$BASE_FLAGS -march=native"
     fi
+
+    # Disable warnings that break compilation with Clang 14
+    CMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS -Wno-deprecated-declarations -Wno-unused-value -Wno-inconsistent-missing-override -Wno-parentheses"
 fi
 
 export LDFLAGS="-Wl,--copy-dt-needed-entries"
@@ -38,8 +39,9 @@ echo "Using compiler: $CMAKE_CXX_COMPILER"
 echo "C++ Flags: $CMAKE_CXX_FLAGS"
 echo "Project: $PROJECT_NAME"
 
-# --- Ensure runtime directories exist ---
-mkdir -p "$INSTALL_PREFIX/logs" "$INSTALL_PREFIX/etc" "$INSTALL_PREFIX/bin" "$INSTALL_PREFIX/sql" "$INSTALL_PREFIX/data" "$INSTALL_PREFIX/lib"
+# --- Ensure directories ---
+mkdir -p "$INSTALL_PREFIX/logs" "$INSTALL_PREFIX/etc" "$INSTALL_PREFIX/bin" \
+         "$INSTALL_PREFIX/sql" "$INSTALL_PREFIX/data" "$INSTALL_PREFIX/lib"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
@@ -68,8 +70,7 @@ if [ "${MAKE_INSTALL:-1}" -eq 1 ]; then
     else
         CORES="$BUILD_CORES"
     fi
-
-    echo "Using $CORES cores for build (System total: $TOTAL_CORES)"
+    echo "Using $CORES cores for build"
     make -j"$CORES" install
 fi
 
