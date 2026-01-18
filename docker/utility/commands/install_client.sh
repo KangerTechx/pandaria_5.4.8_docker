@@ -11,7 +11,7 @@ GITHUB_RELEASE_TAG="client-mop-5.4.8"
 
 BASE_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
 DOWNLOADS_DIR="$BASE_DIR/app/downloads"
-CLIENT_DIR="$BASE_DIR/app/client"
+CLIENT_DIR="${WOW_INTERNAL:-/app/wow}"
 
 mkdir -p "$DOWNLOADS_DIR" "$CLIENT_DIR"
 
