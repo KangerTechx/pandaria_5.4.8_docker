@@ -244,7 +244,7 @@ configure_client:
 apply_custom_config:
 	$(DOCKER_COMPOSE) run --rm $(UTILITY) /bin/commands$(INSTALL_PREFIX) apply_custom_config.sh $(FILE)
 
-install: fetch_source build compile download_client extract_data setup_db configure start
+install: fetch_source build download_client compile extract_data setup_db configure start
 	@echo "Installation complete. All services are running."
 
 # --- Dependency Check ---
