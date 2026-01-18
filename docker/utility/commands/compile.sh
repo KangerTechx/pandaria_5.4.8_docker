@@ -29,7 +29,12 @@ if [ -z "$CMAKE_CXX_FLAGS" ]; then
     fi
 
     # Disable warnings that break compilation with Clang 14
-    CMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS -Wno-deprecated-declarations -Wno-unused-value -Wno-inconsistent-missing-override -Wno-parentheses"
+    CMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS \
+-Wno-deprecated-declarations \
+-Wno-unused-value \
+-Wno-inconsistent-missing-override \
+-Wno-parentheses \
+-Wno-undefined-var-template"
 fi
 
 export LDFLAGS="-Wl,--copy-dt-needed-entries"
