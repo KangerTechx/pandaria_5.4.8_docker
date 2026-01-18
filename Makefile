@@ -4,7 +4,7 @@ MAKEFLAGS += --silent
 # --- Load environment variables ---
 ifneq ("$(wildcard .env)","")
     include .env
-    export $(shell sed -n 's/^\([^#]\+\)=.*/\1/p' .env)
+    export $(shell sed -n 's/^\([^#]\+\)=.*/\$(EXTRACTORS)/p' .env)
 endif
 
 DOCKER_COMPOSE := docker compose
@@ -59,7 +59,6 @@ help:
 	@echo "  make telnet              - Connect to the RA console via telnet"
 	@echo ""
 	@echo "=== Config & Client ==="
-	@echo "  make client              - Download and prepare WoW 5.4.8 client files"
 	@echo "  make configure_client    - Update client realmlist and Config.wtf"
 	@echo "  make apply_custom_config - Apply .conf overrides from $(CUSTOM_DIR)"
 	@echo ""
@@ -82,6 +81,9 @@ compile:
 
 configure:
 	$(DOCKER_COMPOSE) run --rm $(UTILITY) configure
+
+download_client:
+	$(DOCKER_COMPOSE) run --rm $(UTILITY) install_client
 
 extract_data:
 	$(DOCKER_COMPOSE) run --rm $(UTILITY) extract_data
@@ -242,7 +244,7 @@ configure_client:
 apply_custom_config:
 	$(DOCKER_COMPOSE) run --rm $(UTILITY) /bin/commands$(INSTALL_PREFIX) apply_custom_config.sh $(FILE)
 
-install: fetch_source build compile extract_data setup_db configure start
+install: fetch_source build compile download_client extract_data setup_db configure start
 	@echo "Installation complete. All services are running."
 
 # --- Dependency Check ---
